@@ -1,0 +1,5 @@
+# Generated stimulus and simulation outputs
+cbd_input.txt
+cbd_expected.txt
+hw_output.txt
+cbd_sampler_tb.vvp
