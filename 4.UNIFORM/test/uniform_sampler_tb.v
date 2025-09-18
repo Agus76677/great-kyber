@@ -52,12 +52,12 @@ module uniform_sampler_tb;
     reg [CAND_BITS-1:0] actual_lane;
 
     initial begin
-        $readmemh("UNIFORM/test/data/random_in.mem", random_mem);
-        $readmemh("UNIFORM/test/data/q.mem", q_mem);
-        $readmemb("UNIFORM/test/data/random_valid.mem", valid_mem);
-        $readmemh("UNIFORM/test/data/expected_vals.mem", expected_vals_mem);
-        $readmemh("UNIFORM/test/data/expected_valid.mem", expected_valid_mem);
-        $readmemh("UNIFORM/test/data/expected_retry.mem", expected_retry_mem);
+        $readmemh("4.UNIFORM/test/data/random_in.mem", random_mem);
+        $readmemh("4.UNIFORM/test/data/q.mem", q_mem);
+        $readmemb("4.UNIFORM/test/data/random_valid.mem", valid_mem);
+        $readmemh("4.UNIFORM/test/data/expected_vals.mem", expected_vals_mem);
+        $readmemh("4.UNIFORM/test/data/expected_valid.mem", expected_valid_mem);
+        $readmemh("4.UNIFORM/test/data/expected_retry.mem", expected_retry_mem);
     end
 
     initial begin

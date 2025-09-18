@@ -22,27 +22,15 @@ DATA_DIR = Path(__file__).resolve().parent / "data"
 def compute_barrett_mu(q_val: int) -> int:
     if q_val == 0:
         return 0
-    remainder = 0
-    quotient = 0
-    for idx in range(BARRETT_WIDTH, 0, -1):
-        remainder = (remainder << 1) | (1 if idx == BARRETT_WIDTH else 0)
-        if remainder >= q_val:
-            remainder -= q_val
-            quotient |= 1 << (idx - 1)
-    return quotient
+    numerator = 1 << BARRETT_WIDTH
+    return numerator // q_val
 
 
-def compute_candidate_floor(q_val: int) -> int:
+def compute_floor_factor(q_val: int) -> int:
     if q_val == 0:
         return 0
-    remainder = 0
-    quotient = 0
-    for idx in range(FLOOR_WIDTH, 0, -1):
-        remainder = (remainder << 1) | (1 if idx == FLOOR_WIDTH else 0)
-        if remainder >= q_val:
-            remainder -= q_val
-            quotient |= 1 << (idx - 1)
-    return quotient
+    numerator = 1 << CAND_BITS
+    return numerator // q_val
 
 
 def barrett_reduce(value: int, q_val: int, mu_val: int) -> int:
@@ -104,7 +92,7 @@ def generate_vectors(seed: int = 2024) -> None:
 
         rnd, q_val = inputs[idx]
         mu_val = compute_barrett_mu(q_val)
-        floor_val = compute_candidate_floor(q_val)
+        floor_val = compute_floor_factor(q_val)
         threshold = q_val * floor_val
 
         lane_value = 0
@@ -114,14 +102,19 @@ def generate_vectors(seed: int = 2024) -> None:
             candidate = (rnd >> (lane * CAND_BITS)) & MASK_CAND
             reduced = 0
             accept = 0
+            retry = 0
             if q_val != 0:
                 reduced = barrett_reduce(candidate, q_val, mu_val)
                 if floor_val != 0 and candidate < threshold:
                     accept = 1
+                elif floor_val != 0:
+                    retry = 1
+                else:
+                    retry = 1
             if accept:
                 lane_value |= (reduced & MASK_CAND) << (lane * CAND_BITS)
                 valid_mask |= 1 << lane
-            else:
+            elif retry:
                 retry_mask |= 1 << lane
         expected_vals.append(lane_value)
         expected_valid.append(valid_mask)
