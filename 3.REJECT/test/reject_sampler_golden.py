@@ -11,8 +11,8 @@ CAND_BITS = 12
 VECTORS = 80
 Q_VALUE = 3329  # Kyber modulus for uniform sampling
 
-VECTOR_PATH = pathlib.Path("3.REJECT/test/reject_vectors.txt")
-HW_OUTPUT_PATH = pathlib.Path("3.REJECT/test/hw_output.txt")
+VECTOR_PATH = pathlib.Path("D:/desktopnew/Vivado_Projects/0.Kyber/3.REJECT/test/reject_vectors.txt")
+HW_OUTPUT_PATH = pathlib.Path("D:/desktopnew/Vivado_Projects/0.Kyber/3.REJECT/test/hw_output.txt")
 
 random.seed(2024)
 
