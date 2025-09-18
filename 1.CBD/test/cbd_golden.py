@@ -28,8 +28,14 @@ INPUT_FILE = pathlib.Path(__file__).with_name("cbd_input.txt")
 EXPECTED_FILE = pathlib.Path(__file__).with_name("cbd_expected.txt")
 HW_OUTPUT_FILE = pathlib.Path(__file__).with_name("hw_output.txt")
 
+print(f"当前工作目录: {pathlib.Path.cwd()}")
+print(f"脚本所在目录: {pathlib.Path(__file__).parent}")
+print(f"输入文件绝对路径: {INPUT_FILE.absolute()}")
 
 def generate_vectors(vectors: int, seed: int) -> None:
+    print(f"开始生成 {vectors} 个向量，种子: {seed}")
+    print(f"输入文件路径: {INPUT_FILE}")
+    print(f"期望文件路径: {EXPECTED_FILE}")
     rng = random.Random(seed)
     max_rand = 1 << RAND_WIDTH
     with INPUT_FILE.open("w", encoding="utf-8") as input_fp, EXPECTED_FILE.open(
@@ -177,27 +183,21 @@ def main() -> None:
     parser = argparse.ArgumentParser(description="CBD sampler golden model")
     parser.add_argument("--vectors", type=int, default=64, help="Number of stimulus vectors")
     parser.add_argument("--seed", type=int, default=2024, help="PRNG seed for reproducibility")
-    parser.add_argument(
-        "--generate", action="store_true", help="Generate stimulus and expected results"
-    )
-    parser.add_argument(
-        "--verify", action="store_true", help="Verify hardware output and report statistics"
-    )
+    parser.add_argument("--generate", action="store_true", help="Generate stimulus and expected results")
+    parser.add_argument("--verify", action="store_true", help="Verify hardware output and report statistics")
     args = parser.parse_args()
 
+    # 如果没有指定任何操作，默认执行生成操作
     if not args.generate and not args.verify:
-        parser.error("Select at least one action: --generate or --verify")
-
+        args.generate = True  # 默认生成
+    
     if args.generate:
         generate_vectors(args.vectors, args.seed)
-        print(
-            f"Generated {args.vectors} vectors and golden results using seed {args.seed}."
-        )
+        print(f"Generated {args.vectors} vectors and golden results using seed {args.seed}.")
 
     if args.verify:
         verify_results()
         print("Hardware output matches golden model.")
-
 
 if __name__ == "__main__":
     main()

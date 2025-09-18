@@ -93,9 +93,9 @@ module shake_core_tb;
             wait (done == 1'b1);
             @(posedge clk);
             if (file_select == 0) begin
-                f = $fopen("0.SHAKE/test/shake128_output.hex", "w");
+                f = $fopen("D:/desktopnew/Vivado_Projects/0.Kyber/0.SHAKE/test/shake128_output.hex", "w");
             end else begin
-                f = $fopen("0.SHAKE/test/shake256_output.hex", "w");
+                f = $fopen("D:/desktopnew/Vivado_Projects/0.Kyber/0.SHAKE/test/shake256_output.hex", "w");
             end
             for (b = 0; b < target_length; b = b + 1) begin
                 $fdisplay(f, "%02x", buffer[b]);
